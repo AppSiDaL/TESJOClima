@@ -1,0 +1,9 @@
+.cardList {
+  overflow-x: hidden;
+  white-space: nowrap;
+  transition: overflow-x 0.5s ease-in-out; 
+}
+
+.cardList:hover {
+  overflow-x: scroll;
+}
