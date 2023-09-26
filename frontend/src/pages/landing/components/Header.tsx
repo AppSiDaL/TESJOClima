@@ -2,10 +2,11 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { DatosClimaticos } from "../../../Types";
+import theme from "../../../utils/Theme";
 interface HeaderProps {
   data: DatosClimaticos;
 }
-const Header = ({data}:HeaderProps) => {
+const Header = ({ data }: HeaderProps) => {
   return (
     <Container>
       <Row>
@@ -25,7 +26,7 @@ const Header = ({data}:HeaderProps) => {
       </Row>
       <Row>
         <Col className="text-center">
-          <h1 className="h5">Amanecer</h1>
+          <h1 className="h5">{theme.getTimeRange()}</h1>
         </Col>
       </Row>
     </Container>

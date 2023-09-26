@@ -21,4 +21,22 @@ const getBackground = () => {
   return bgImage;
 };
 
-export default { getBackground };
+const getTimeRange = () => {
+  const date = new Date();
+  let range;
+  const hour = date.getHours();
+
+  if (hour >= 19 || hour < 6) {
+    range = "Night";
+  } else if (hour >= 18) {
+    range = "Sunset";
+  } else if (hour >= 10) {
+    range = "Day";
+  } else {
+    range = "Sunrise";
+  }
+
+  return range;
+};
+
+export default { getBackground, getTimeRange };

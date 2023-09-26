@@ -3,16 +3,12 @@ export interface DatosClimaticos {
   temperatura: number;
   estado_tiempo: string;
   porcentaje_lluvia: number;
-  confort: confort;
+  confort: confort[];
 }
 
 export interface confort {
-  humedad: number;
-  lluvia: number;
-  luz: number;
-  presion: number;
-  viento: number;
-  direccion: number;
+  name: string;
+  value: number;
 }
 
 export interface DatosClimaticosSemanales {

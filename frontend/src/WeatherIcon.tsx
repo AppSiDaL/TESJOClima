@@ -12,6 +12,12 @@ import nightClear from "./assets/icons/night-clear.json";
 import nightCloudy from "./assets/icons/night-cloudy.json";
 import nightRainy from "./assets/icons/night-rainy.json";
 import nightSnowy from "./assets/icons/night-snowy.json";
+import humedad from "./assets/icons/confort/humidity.json";
+import lluvia from "./assets/icons/confort/rain.json";
+import luz from "./assets/icons/confort/light.json";
+import presion from "./assets/icons/confort/pressure.json";
+import viento from "./assets/icons/confort/wind.json";
+import direccion from "./assets/icons/confort/direccion.json";
 
 interface IconMapping {
   [key: string]: object;
@@ -31,6 +37,12 @@ const iconMapping: IconMapping = {
   "night-cloudy": nightCloudy,
   "night-rainy": nightRainy,
   "night-snowy": nightSnowy,
+  humedad,
+  lluvia,
+  luz,
+  presion,
+  viento,
+  direccion,
 };
 
 interface WeatherIconProps {

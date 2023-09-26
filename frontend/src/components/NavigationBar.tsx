@@ -8,9 +8,9 @@ import Image from "react-bootstrap/Image";
 import { Link } from "react-router-dom";
 const NavigationBar = () => {
   return (
-    <div style={{ background: "#022D50", color: "white" }}>
+    <div style={{ background: "#005986", color: "white" }}>
       <Navbar expand="lg">
-        <Container style={{ background: "#022D50" }} fluid>
+        <Container style={{ background: "#005986" }} fluid>
           <Navbar.Brand href="#">
             <Image
               src={TESJOLogo}
@@ -33,6 +33,12 @@ const NavigationBar = () => {
                 Now
               </Nav.Link>
             </Nav>
+            <Container fluid >
+              <div className="text-center">
+                Tecnologico de Estudios Superiores, Jocotitlan, Edo. Mexico. a
+                Fri Sep 22 2023
+              </div>
+            </Container>
             <Form className="d-flex">
               <Form.Control
                 type="date"
@@ -45,11 +51,8 @@ const NavigationBar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Container fluid style={{ background: "#355773" }}>
-        <div className="text-center">
-          Tecnologico de Estudios Superiores, Jocotitlan, Edo. Mexico. a Fri Sep
-          22 2023
-        </div>
+      <Container fluid style={{ background: "#003550" }}>
+        <div className="text-center" style={{ height: 30 }}></div>
       </Container>
     </div>
   );
