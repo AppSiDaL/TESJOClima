@@ -1,7 +1,7 @@
 import sunrise from "../assets/sunrise.jpg";
 import day from "../assets/day.jpeg";
 import sunset from "../assets/sunset.jpg";
-import night from "../assets/night.png";
+import night from "../assets/night1.jpg";
 
 const getBackground = () => {
   const date = new Date();
@@ -39,4 +39,22 @@ const getTimeRange = () => {
   return range;
 };
 
-export default { getBackground, getTimeRange };
+const getColor = () => {
+  const date = new Date();
+  let color;
+  const hour = date.getHours();
+
+  if (hour >= 19 || hour < 6) {
+    color = "#6F6175";
+  } else if (hour >= 18) {
+    color = "#EB7812";
+  } else if (hour >= 10) {
+    color = "#2545C7";
+  } else {
+    color = "#C73716";
+  }
+
+  return color;
+};
+
+export default { getBackground, getTimeRange,getColor };

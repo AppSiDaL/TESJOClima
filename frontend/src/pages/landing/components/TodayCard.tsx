@@ -1,6 +1,6 @@
 import Card from "react-bootstrap/Card";
 import { DatosClimaticos } from "../../../Types";
-import { WeatherIcon } from "../../../WeatherIcon"; // Asegúrate de importar el componente WeatherIcon desde su ubicación correcta
+import { WeatherIcon } from "../../../utils/WeatherIcon"; // Asegúrate de importar el componente WeatherIcon desde su ubicación correcta
 
 interface TodayCardProps {
   dato: DatosClimaticos;
@@ -15,7 +15,7 @@ const TodayCard = ({ dato }: TodayCardProps) => {
       >
         <Card.Body>
           <Card.Title>{dato.temperatura}º</Card.Title>
-          <WeatherIcon estadoTiempo={dato.estado_tiempo} />
+          <WeatherIcon width="200px" height="200px" estadoTiempo={dato.estado_tiempo} />
           <Card.Text>{dato.porcentaje_lluvia}%</Card.Text>
           <Card.Text>{dato.hora}</Card.Text>
         </Card.Body>

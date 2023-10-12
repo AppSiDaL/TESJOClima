@@ -16,7 +16,9 @@ const Header = ({ data }: HeaderProps) => {
       </Row>
       <Row>
         <Col className="text-center">
-          <h2 className="mb-5">23/9/2023, 7:15:53</h2>
+          <h2 className="mb-5">
+            {data.date}, {data.hora}
+          </h2>
         </Col>
       </Row>
       <Row>

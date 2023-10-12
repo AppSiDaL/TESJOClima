@@ -1,6 +1,6 @@
 import Card from "react-bootstrap/Card";
 import { DatosClimaticos } from "../../../Types";
-import { WeatherIcon } from "../../../WeatherIcon";
+import { GetChart } from "../../../utils/WeatherIcon";
 interface DataCardsProps {
   data: DatosClimaticos;
 }
@@ -15,13 +15,14 @@ const DataCards = ({ data }: DataCardsProps) => {
               style={{
                 width: "20rem",
                 backgroundColor: "transparent",
+                borderColor: "black",
                 color: "white",
               }}
-              className="text-center border-0"
+              className="text-center"
             >
               <Card.Body>
                 <Card.Title>{dato.name}</Card.Title>
-                <WeatherIcon estadoTiempo={dato.name} />
+                <GetChart value={dato.name} />
                 <Card.Text>{dato.value}</Card.Text>
               </Card.Body>
             </Card>

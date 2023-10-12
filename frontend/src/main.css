@@ -1,0 +1,12 @@
+.gen {
+  background: rgb(65, 108, 166);
+  background: linear-gradient(
+    180deg,
+    rgba(65, 108, 166, 0.8520658263305322) 37%,
+    rgba(242, 188, 141, 1) 100%
+  );
+  background-size: 100%;
+}
+.containerHours:hover {
+  cursor: pointer;
+}

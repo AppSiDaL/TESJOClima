@@ -32,8 +32,11 @@ const NavigationBar = () => {
               <Nav.Link as={Link} to="/now" className="text-light">
                 Now
               </Nav.Link>
+              <Nav.Link as={Link} to="/hours" className="text-light">
+                Hours
+              </Nav.Link>
             </Nav>
-            <Container fluid >
+            <Container fluid>
               <div className="text-center">
                 Tecnologico de Estudios Superiores, Jocotitlan, Edo. Mexico. a
                 Fri Sep 22 2023
