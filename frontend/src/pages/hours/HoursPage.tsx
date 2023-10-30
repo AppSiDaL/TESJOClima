@@ -5,16 +5,18 @@ import { useQuery } from "react-query";
 import { hoursValues } from "../../Types";
 import HourCard from "./components/HourCard";
 import { WeatherIcon } from "../../utils/WeatherIcon";
+import Theme from "../../utils/Theme";
 
 const HoursPage = () => {
   const result = useQuery({
     queryKey: ["hours"],
     queryFn: () => weatherService.getHours(),
   });
+  const theme = Theme.getGradient();
 
   if (result.isLoading) {
     return (
-      <div className="gen">
+      <div className={theme}>
         <WeatherIcon estadoTiempo="loading" width="50%" height="50%" />
       </div>
     );
@@ -23,8 +25,11 @@ const HoursPage = () => {
   const hours: hoursValues[] = result.data;
 
   return (
-    <Container className="gen justify-content-center align-items-center" fluid>
-      <Card className="text-center  container-md">
+    <Container
+      className={theme + " justify-content-center align-items-center"}
+      fluid
+    >
+      <Card className="text-center  container-sm">
         <Card.Header>
           Pronostico por hora <strong>Jocotitlan</strong>
         </Card.Header>

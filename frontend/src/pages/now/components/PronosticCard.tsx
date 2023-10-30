@@ -19,7 +19,7 @@ const PronosticCard = ({ value }: pronosticCardProps) => {
       >
         <Card.Body>
           <Card.Title>
-            <h5>{value.momento}</h5>
+            <h5 style={{textTransform:"capitalize"}}>{value.momento}</h5>
           </Card.Title>
           <Card.Title>
             <h5>{value.temperatura} %</h5>

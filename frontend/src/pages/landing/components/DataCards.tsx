@@ -22,7 +22,7 @@ const DataCards = ({ data }: DataCardsProps) => {
             >
               <Card.Body>
                 <Card.Title>{dato.name}</Card.Title>
-                <GetChart value={dato.name} />
+                <GetChart name={dato.name} value={dato.value} />
                 <Card.Text>{dato.value}</Card.Text>
               </Card.Body>
             </Card>

@@ -21,12 +21,13 @@ const LangingPage = () => {
       <div
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
+          backgroundSize:"cover",
+        backgroundAttachment:"fixed",
           backgroundRepeat: "no-repeat",
           color: "white",
         }}
       >
-        <WeatherIcon estadoTiempo="loading" width="50%" height="50%" />
+        <WeatherIcon estadoTiempo="loading" width="70%" height="70%" />
       </div>
     );
   }
@@ -37,6 +38,7 @@ const LangingPage = () => {
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
+        backgroundAttachment:"fixed",
         backgroundRepeat: "no-repeat",
         color: "white",
       }}

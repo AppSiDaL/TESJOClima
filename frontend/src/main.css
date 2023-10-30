@@ -1,12 +1,75 @@
-.gen {
-  background: rgb(65, 108, 166);
+.sunrise {
+  background: rgb(249, 164, 135);
   background: linear-gradient(
-    180deg,
-    rgba(65, 108, 166, 0.8520658263305322) 37%,
-    rgba(242, 188, 141, 1) 100%
+    0deg,
+    rgba(249, 164, 135, 1) 0%,
+    rgba(239, 211, 210, 1) 27%,
+    rgba(151, 210, 224, 1) 100%
   );
   background-size: 100%;
+  background-attachment: fixed; /* Agregar esta línea */
 }
+
+.day {
+  background: rgb(200, 222, 236);
+  background: linear-gradient(
+    0deg,
+    rgba(200, 222, 236, 1) 0%,
+    rgba(132, 176, 223, 1) 37%,
+    rgba(67, 116, 185, 1) 100%
+  );
+  background-size: 100%;
+  background-attachment: fixed; /* Agregar esta línea */
+}
+
+.night {
+  background: rgb(2, 10, 47);
+  background: linear-gradient(
+    180deg,
+    rgba(2, 10, 47, 1) 0%,
+    rgba(0, 31, 77, 1) 65%,
+    rgba(40, 67, 114, 1) 100%
+  );
+  background-size: 100%;
+  background-attachment: fixed; /* Agregar esta línea */
+}
+
 .containerHours:hover {
   cursor: pointer;
+}
+
+.day-button {
+  background-color: transparent;
+  border-color: blue;
+}
+.day-button:hover {
+  background-color: blue;
+  border-color: blue;
+}
+
+.night-button {
+  background-color: transparent;
+  border-color: rgb(39, 39, 56);
+}
+.night-button:hover {
+  background-color: rgb(39, 39, 56);
+  border-color: rgb(39, 39, 56);
+}
+
+.sunset-button {
+  background-color: transparent;
+  border-color: blue;
+}
+.sunset-button:hover {
+  background-color: blue;
+  border-color: blue;
+}
+
+.sunrise-button {
+  background-color: transparent;
+  border-color: blue;
+}
+.sunrise-button:hover {
+  background-color: blue;
+  border-color: blue;
 }

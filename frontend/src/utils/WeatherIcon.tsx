@@ -79,9 +79,10 @@ interface WeatherIconProps {
 }
 interface miniWeatherIconProps {
   value: string;
+  color:string;
 }
 
-export const MiniWeatherIcon = ({ value }: miniWeatherIconProps) => {
+export const MiniWeatherIcon = ({ value,color }: miniWeatherIconProps) => {
   const WeatherIcon = miniIConMaping[value];
 
   if (!WeatherIcon) {
@@ -90,7 +91,7 @@ export const MiniWeatherIcon = ({ value }: miniWeatherIconProps) => {
 
   return (
     <div className="container">
-      {React.createElement(WeatherIcon, { width: "32", height: "32" })}
+      {React.createElement(WeatherIcon, { width: "32", height: "32",color})}
     </div>
   );
 };
@@ -142,7 +143,7 @@ export const SunriseSunsetIcon = () => {
 
   const frameNumber = 2000;
   return (
-    <div ref={containerRef} style={{ width: "160px", height: "80px" }}></div>
+    <div ref={containerRef}></div>
   );
 };
 
@@ -177,21 +178,21 @@ export const AirQualityIcon = ({ value }: AirQualityIcon) => {
   );
 };
 
-const chartMapping: { [key: string]: (() => JSX.Element) | object } = {
-  humedad: () => (
-    <GaugeChart color="#224D99" name="Humedad" valueName="Humedad" value={50} />
+const chartMapping: { [key: string]: (value: number) => JSX.Element } = {
+  humedad: (value) => (
+    <GaugeChart min={0} max={200} color="#224D99" name="Humedad" valueName="Humedad" value={value} />
   ),
-  lluvia: () => (
-    <GaugeChart color="#224D99" name="Lluvia" valueName="Lluvia" value={0} />
+  lluvia: (value) => (
+    <GaugeChart min={0} max={100} color="#224D99" name="Lluvia" valueName="Lluvia" value={value} />
   ),
-  luz: () => (
-    <GaugeChart color="#DBE032" name="Luz" valueName="Luz" value={45} />
+  luz: (value) => (
+    <GaugeChart min={0} max={100} color="#ABA915" name="Luz" valueName="Luz" value={value} />
   ),
-  presion: () => (
-    <GaugeChart color="#941230" name="Presion" valueName="Presion" value={20} />
+  presion: (value) => (
+    <GaugeChart min={600} max={800} color="#941230" name="Presion" valueName="Presion" value={value} />
   ),
-  viento: () => (
-    <GaugeChart color="#2C64A1" name="Viento" valueName="Viento" value={50} />
+  viento: (value) => (
+    <GaugeChart min={0} max={50} color="#2C64A1" name="Viento" valueName="Viento" value={value} />
   ),
   direccion: () => (
     <WeatherIcon estadoTiempo="compass" height="300px" width="200px" />
@@ -199,20 +200,20 @@ const chartMapping: { [key: string]: (() => JSX.Element) | object } = {
 };
 
 interface GetChartProps {
-  value: string;
+  name: string;
+  value:number;
 }
 
-export const GetChart = ({ value }: GetChartProps) => {
-  const Chart = chartMapping[value];
+export const GetChart = ({ name,value }: GetChartProps) => {
+  const Chart = chartMapping[name];
 
   if (!Chart) {
     return null;
   }
 
   if (typeof Chart === "function") {
-    return Chart(); // Llama a la función para obtener el componente
+    return Chart(value); // Llama a la función para obtener el componente
   }
 
-  // Si Chart no es una función, es un objeto y puedes devolverlo directamente
   return Chart;
 };

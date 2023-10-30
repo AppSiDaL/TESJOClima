@@ -1,7 +1,6 @@
 import Card from "react-bootstrap/Card";
 import { DatosClimaticos } from "../../../Types";
 import { WeatherIcon } from "../../../utils/WeatherIcon"; // Asegúrate de importar el componente WeatherIcon desde su ubicación correcta
-
 interface TodayCardProps {
   dato: DatosClimaticos;
 }

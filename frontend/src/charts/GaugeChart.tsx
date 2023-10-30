@@ -7,9 +7,11 @@ interface GaugeChartProps {
   valueName: string;
   value: number;
   color: string;
+  max: number;
+  min: number;
 }
 
-const Page: React.FC<GaugeChartProps> = ({ name, value, valueName, color }) => {
+const Page: React.FC<GaugeChartProps> = ({ name, value, valueName, color,max,min }) => {
   const [isGraphVisible, setIsGraphVisible] = useState(false);
   const [ref, inView] = useInView({
     triggerOnce: true, // Cambiado a false para permitir animaciones múltiples.
@@ -23,6 +25,8 @@ const Page: React.FC<GaugeChartProps> = ({ name, value, valueName, color }) => {
       {
         name: name,
         type: "gauge",
+        min,
+        max,
         progress: {
           show: true,
         },

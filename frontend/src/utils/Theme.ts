@@ -21,6 +21,23 @@ const getBackground = () => {
   return bgImage;
 };
 
+const getGradient = () => {
+  const date = new Date();
+  let gradient;
+  const hour = date.getHours();
+
+  if (hour >= 19 || hour < 6) {
+    gradient = "night";
+  } else if (hour >= 18) {
+    gradient = "sunset";
+  } else if (hour >= 10) {
+    gradient = "day";
+  } else {
+    gradient = "sunrise";
+  }
+
+  return gradient;
+};
 const getTimeRange = () => {
   const date = new Date();
   let range;
@@ -57,4 +74,4 @@ const getColor = () => {
   return color;
 };
 
-export default { getBackground, getTimeRange,getColor };
+export default { getBackground, getTimeRange,getColor,getGradient };

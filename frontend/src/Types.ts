@@ -1,6 +1,6 @@
 export interface DatosClimaticos {
   hora: string;
-  date: "string";
+  date: string;
   temperatura: number;
   estado_tiempo: string;
   porcentaje_lluvia: number;

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "types": [
+        "node"
+      ],
+      "moduleDetection": "force",
+      "target": "ES6",
+      "outDir": "./build/",
+      "module": "commonjs",
+      "strict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "esModuleInterop": true
+    },
+  }

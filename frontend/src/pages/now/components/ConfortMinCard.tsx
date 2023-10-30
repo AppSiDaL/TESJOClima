@@ -1,26 +1,17 @@
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-
 import { confort } from "../../../Types";
 import { MiniWeatherIcon } from "../../../utils/WeatherIcon";
 
 interface ConfortMinCardProps {
   values: confort;
+  iconColor: string;
 }
 
-const ConfortMinCard = ({ values }: ConfortMinCardProps) => {
+const ConfortMinCard = ({ values,iconColor }: ConfortMinCardProps) => {
   return (
     <div>
-      <Container>
-        <Row>
-          <Col>
-            <MiniWeatherIcon value={values.name} />
-          </Col>
-          <Col>{values.name}</Col>
-          <Col>{values.value}</Col>
-        </Row>
-      </Container>
+      <p style={{textTransform:"capitalize"}}>{values.name}</p>
+      <MiniWeatherIcon color={iconColor} value={values.name} />
+      {values.value}
     </div>
   );
 };
