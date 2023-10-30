@@ -1,12 +1,8 @@
 import Card from "react-bootstrap/Card";
 import { SunriseSunsetIcon } from "../../../utils/WeatherIcon";
-import { confortValues } from "../../../Types";
 
 import { ArrowBarDown, ArrowBarUp } from "react-bootstrap-icons";
 
-interface AirQualityProps {
-  values: confortValues;
-}
 
 const SunriseSunset = () => {
   return (
