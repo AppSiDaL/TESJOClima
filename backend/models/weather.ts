@@ -6,6 +6,10 @@ class Tesjo extends Model {}
 
 Tesjo.init(
   {
+    timestamp: {
+      type: DataTypes.BIGINT,
+      primaryKey: true
+    },
     fecha: {
       type: DataTypes.DATEONLY,
     },
@@ -15,9 +19,6 @@ Tesjo.init(
     minuto: {
       type: DataTypes.INTEGER,
     },
-    segundo: {
-        type: DataTypes.INTEGER,
-      },
     direccion: {
       type: DataTypes.INTEGER,
     },
@@ -44,7 +45,7 @@ Tesjo.init(
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: "tesjo",
+    modelName: "tesjo_datos",
   }
 );
 
