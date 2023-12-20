@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env nodemon index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.ts",
+    "start": "node public/index.js",
+    "build:frontend": "cd ../frontend && npm run build && cp -r dist ../backend/dist",
+    "build": "tsc",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",

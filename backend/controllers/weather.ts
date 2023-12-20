@@ -44,6 +44,7 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
         `Error en la solicitud de datos: ${dataResponse.status} - ${dataResponse.statusText}`
       );
     }
+    console.log(dataResponse);
 
     const data = await dataResponse.json();
 
