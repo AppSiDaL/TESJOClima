@@ -1,5 +1,7 @@
+import { TesjoValues } from "../types";
+
 const tf = require("@tensorflow/tfjs");
-const Weather = require("../models/weather");
+const {Weather} = require("../models");
 
 // Crear un modelo secuencial.
 const model = tf.sequential();
@@ -17,10 +19,18 @@ model.compile({ loss: "meanSquaredError", optimizer: "sgd" });
 Weather.findAll({}).then((results: any) => {
   // Convertir los resultados en tensores.
   const xs = tf.tensor2d(
-    results.map((result: any) => [
-      result.feature1,
-      result.feature2,
-      // ...añadir todas las características aquí...
+    results.map((result: TesjoValues) => [
+      result.timestamp,
+      result.fecha,
+      result.hora,
+      result.minuto,
+      result.direccion,
+      result.humedad,
+      result.lluvia,
+      result.luz,
+      result.presion,
+      result.temperatura,
+      result.velocidad,
     ])
   );
   const ys = tf.tensor2d(results.map((result: any) => [result.target]));

@@ -1,10 +1,12 @@
 const Weather = require("./weather");
+const Prediction = require("./prediction");
 const { sequelize } = require("../utils/db");
 
 sequelize
   .sync()
   .then(() => {
     Weather.sync();
+    Prediction.sync();
     console.log("All models were synchronized successfully.");
   })
   .catch((error: Error) => {
@@ -14,4 +16,5 @@ export {};
 
 module.exports = {
   Weather,
+  Prediction
 };

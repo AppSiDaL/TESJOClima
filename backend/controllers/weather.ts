@@ -1,9 +1,13 @@
 const weatherRouter = require("express").Router();
 import { Response, Request } from "express";
-import { landingProps } from "../types";
+import { SQLTesjoResponse, landingProps } from "../types";
+import {
+  calculateRainProbability,
+  determineWeatherState,
+} from "../utils/weather";
 const mockData = require("./mockData");
 const { Weather } = require("../models");
-const moment = require("moment-timezone")
+const moment = require("moment-timezone");
 
 weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
   try {
@@ -51,7 +55,7 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
     const data = await dataResponse.json();
 
     const newDataArray = data.map((item: any) => {
-      const date = moment(item.ts).tz('America/Mexico_City');
+      const date = moment(item.ts).tz("America/Mexico_City");
       const day = date.date();
       const month = date.month() + 1;
       const year = date.year();
@@ -84,17 +88,30 @@ weatherRouter.get("/", async (_req: Request, res: Response) => {
 });
 
 weatherRouter.get("/landing", async (_req: Request, res: Response) => {
-  const actualValue = await Weather.findAll({
+  const actualValue:SQLTesjoResponse[] = await Weather.findAll({
     limit: 1,
     order: [["timestamp", "DESC"]],
   });
-  const response:landingProps={
-    actual:actualValue[0].dataValues,
-    next48:[],
-    week:[]
-  }
-  console.log(response);
-  res.status(200).json({data:actualValue[0].dataValues.fecha});
+  const response: landingProps = {
+    actual: {
+      hora: actualValue[0].dataValues.hora,
+      date: actualValue[0].dataValues.fecha,
+      temperatura: actualValue[0].dataValues.temperatura,
+      estado_tiempo: determineWeatherState(actualValue[0].dataValues),
+      porcentaje_lluvia: calculateRainProbability(actualValue[0].dataValues),
+      confort: [
+        { name: "humedad", value: actualValue[0].dataValues.humedad },
+        { name: "lluvia", value: actualValue[0].dataValues.lluvia },
+        { name: "luz", value: actualValue[0].dataValues.luz },
+        { name: "presion", value: actualValue[0].dataValues.presion },
+        { name: "viento", value: actualValue[0].dataValues.velocidad },
+        { name: "direccion", value: actualValue[0].dataValues.direccion },
+      ],
+    },
+    next48: [],
+    week: [],
+  };
+  res.status(200).json(response);
 });
 
 weatherRouter.get("/now", async (_req: Request, res: Response) => {
