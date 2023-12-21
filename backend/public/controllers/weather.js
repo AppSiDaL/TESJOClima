@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const weatherRouter = require("express").Router();
 const mockData = require("./mockData");
 const { Weather } = require("../models");
+const moment = require("moment-timezone");
 weatherRouter.get("/bridge", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tokenUrl = "https://eu-central.aws.thinger.io:443/oauth/token";
@@ -44,15 +45,15 @@ weatherRouter.get("/bridge", (_req, res) => __awaiter(void 0, void 0, void 0, fu
         console.log(dataResponse);
         const data = yield dataResponse.json();
         const newDataArray = data.map((item) => {
-            const date = new Date(item.ts);
-            const day = date.getDate();
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
+            const date = moment(item.ts).tz('America/Mexico_City');
+            const day = date.date();
+            const month = date.month() + 1;
+            const year = date.year();
             return {
                 timestamp: item.ts,
                 fecha: `${year}-${month}-${day}`,
-                hora: date.getHours(),
-                minuto: date.getMinutes(),
+                hora: date.hours(),
+                minuto: date.minutes(),
                 direccion: item.val.DIRECCION,
                 humedad: item.val.HUMEDAD,
                 lluvia: item.val.LLUVIA,
@@ -75,7 +76,17 @@ weatherRouter.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function
     res.send("TESJo Clima API ----- Developed by AppSiDaL");
 }));
 weatherRouter.get("/landing", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json(mockData.landingData);
+    const actualValue = yield Weather.findAll({
+        limit: 1,
+        order: [["timestamp", "DESC"]],
+    });
+    const response = {
+        actual: actualValue[0].dataValues,
+        next48: [],
+        week: []
+    };
+    console.log(response);
+    res.status(200).json({ data: actualValue[0].dataValues.fecha });
 }));
 weatherRouter.get("/now", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(mockData.now);

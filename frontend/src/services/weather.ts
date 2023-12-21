@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "/api";
+const url = "http://localhost:3000/api";
 const getLanding = () => {
   return axios.get(`${url}/landing`).then((res) => res.data);
 };

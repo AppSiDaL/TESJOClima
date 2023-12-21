@@ -1,7 +1,9 @@
 const weatherRouter = require("express").Router();
 import { Response, Request } from "express";
+import { landingProps } from "../types";
 const mockData = require("./mockData");
 const { Weather } = require("../models");
+const moment = require("moment-timezone")
 
 weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
   try {
@@ -49,15 +51,15 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
     const data = await dataResponse.json();
 
     const newDataArray = data.map((item: any) => {
-      const date = new Date(item.ts);
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
+      const date = moment(item.ts).tz('America/Mexico_City');
+      const day = date.date();
+      const month = date.month() + 1;
+      const year = date.year();
       return {
         timestamp: item.ts,
         fecha: `${year}-${month}-${day}`,
-        hora: date.getHours(),
-        minuto: date.getMinutes(),
+        hora: date.hours(),
+        minuto: date.minutes(),
         direccion: item.val.DIRECCION,
         humedad: item.val.HUMEDAD,
         lluvia: item.val.LLUVIA,
@@ -82,7 +84,17 @@ weatherRouter.get("/", async (_req: Request, res: Response) => {
 });
 
 weatherRouter.get("/landing", async (_req: Request, res: Response) => {
-  res.json(mockData.landingData);
+  const actualValue = await Weather.findAll({
+    limit: 1,
+    order: [["timestamp", "DESC"]],
+  });
+  const response:landingProps={
+    actual:actualValue[0].dataValues,
+    next48:[],
+    week:[]
+  }
+  console.log(response);
+  res.status(200).json({data:actualValue[0].dataValues.fecha});
 });
 
 weatherRouter.get("/now", async (_req: Request, res: Response) => {
