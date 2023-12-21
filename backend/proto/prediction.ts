@@ -1,47 +1,29 @@
-import { TesjoValues } from "../types";
+import * as tf from '@tensorflow/tfjs-node';
 
-const tf = require("@tensorflow/tfjs");
-const {Weather} = require("../models");
+async function predict() {
+  // Cargar el modelo.
+  const model = await tf.loadLayersModel('file://my-model/model.json');
 
-// Crear un modelo secuencial.
-const model = tf.sequential();
+  // Crear un tensor de entrada para la predicción.
+  // Asegúrate de que estos valores están en el formato correcto y normalizados de la misma manera que los datos de entrenamiento.
+  const input = tf.tensor2d([[
+    Number('timestamp'),
+    Number('hora'),
+    Number('minuto'),
+    Number('direccion'),
+    Number('humedad'),
+    Number('lluvia'),
+    Number('luz'),
+    Number('presion'),
+    Number('temperatura'),
+    Number('velocidad'),
+  ]]);
 
-// Añadir una capa densa (fully connected) al modelo.
-model.add(
-  tf.layers.dense({ units: 100, activation: "relu", inputShape: [10] })
-);
-model.add(tf.layers.dense({ units: 1 }));
+  // Hacer una predicción con el modelo.
+  const output = model.predict(input) as tf.Tensor;
 
-// Compilar el modelo.
-model.compile({ loss: "meanSquaredError", optimizer: "sgd" });
+  // Imprimir la predicción.
+  output.print();
+}
 
-// Hacer una consulta a la base de datos.
-Weather.findAll({}).then((results: any) => {
-  // Convertir los resultados en tensores.
-  const xs = tf.tensor2d(
-    results.map((result: TesjoValues) => [
-      result.timestamp,
-      result.fecha,
-      result.hora,
-      result.minuto,
-      result.direccion,
-      result.humedad,
-      result.lluvia,
-      result.luz,
-      result.presion,
-      result.temperatura,
-      result.velocidad,
-    ])
-  );
-  const ys = tf.tensor2d(results.map((result: any) => [result.target]));
-
-  // Entrenar el modelo.
-  model.fit(xs, ys, {
-    epochs: 100,
-    callbacks: {
-      onEpochEnd: async (epoch: any, log: any) => {
-        console.log(`Epoch ${epoch}: loss = ${log.loss}`);
-      },
-    },
-  });
-});
+predict();
