@@ -45,7 +45,7 @@ const NavigationBar = () => {
             </Container>
             <Form className="d-flex">
               <Form.Control
-                type="date"
+                type="datetime-local"
                 placeholder="Search"
                 className="me-2"
                 aria-label="Search"
