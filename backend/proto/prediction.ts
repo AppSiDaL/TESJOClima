@@ -15,7 +15,6 @@ async function predict() {
     return;
   }
 
-  // Obtener datos de entrada y normalizarlos
   const inputData = [
     Number(results[0].dataValues.timestamp),
     Number(results[0].dataValues.hora),

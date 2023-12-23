@@ -16,7 +16,7 @@ const TodayCard = ({ dato }: TodayCardProps) => {
           <Card.Title>{dato.temperatura}º</Card.Title>
           <WeatherIcon width="200px" height="200px" estadoTiempo={dato.estado_tiempo} />
           <Card.Text>{dato.porcentaje_lluvia}%</Card.Text>
-          <Card.Text>{dato.hora}</Card.Text>
+          <Card.Text>{dato.hora}:00</Card.Text>
         </Card.Body>
       </Card>
     </li>

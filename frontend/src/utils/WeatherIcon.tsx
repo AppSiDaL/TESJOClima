@@ -147,6 +147,33 @@ export const SunriseSunsetIcon = () => {
   );
 };
 
+export const WindDirection = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const animation = lottie.loadAnimation({
+        container: containerRef.current,
+        renderer: "svg",
+        loop: false,
+        autoplay: false,
+        animationData: compass,
+      });
+
+      animation.goToAndStop(frameNumber, true);
+
+      return () => {
+        animation.destroy();
+      };
+    }
+  }, []);
+
+  const frameNumber = 20;
+  return (
+    <div ref={containerRef}></div>
+  );
+};
+
 interface AirQualityIcon {
   value: number;
 }
@@ -195,7 +222,7 @@ const chartMapping: { [key: string]: (value: number) => JSX.Element } = {
     <GaugeChart min={0} max={50} color="#2C64A1" name="Viento" valueName="Viento" value={value} />
   ),
   direccion: () => (
-    <WeatherIcon estadoTiempo="compass" height="300px" width="200px" />
+    <WindDirection />
   ),
 };
 

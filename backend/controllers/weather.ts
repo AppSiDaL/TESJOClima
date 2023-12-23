@@ -6,8 +6,9 @@ import {
   determineWeatherState,
 } from "../utils/weather";
 const mockData = require("./mockData");
-const { Weather } = require("../models");
+const { Weather, Prediction } = require("../models");
 const moment = require("moment-timezone");
+import { Op } from "sequelize";
 
 weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
   try {
@@ -88,28 +89,146 @@ weatherRouter.get("/", async (_req: Request, res: Response) => {
 });
 
 weatherRouter.get("/landing", async (_req: Request, res: Response) => {
-  const actualValue:SQLTesjoResponse[] = await Weather.findAll({
-    limit: 1,
+  const currentHour = moment().tz("America/Mexico_City").hour();
+  const currentDate = moment().tz("America/Mexico_City").startOf("day");
+  const nextDate = moment(currentDate).add(1, "day");
+  const secondNextDate = moment(currentDate).add(2, "day");
+
+  const actualValue: SQLTesjoResponse = await Weather.findOne({
     order: [["timestamp", "DESC"]],
   });
-  const response: landingProps = {
-    actual: {
-      hora: actualValue[0].dataValues.hora,
-      date: actualValue[0].dataValues.fecha,
-      temperatura: actualValue[0].dataValues.temperatura,
-      estado_tiempo: determineWeatherState(actualValue[0].dataValues),
-      porcentaje_lluvia: calculateRainProbability(actualValue[0].dataValues),
-      confort: [
-        { name: "humedad", value: actualValue[0].dataValues.humedad },
-        { name: "lluvia", value: actualValue[0].dataValues.lluvia },
-        { name: "luz", value: actualValue[0].dataValues.luz },
-        { name: "presion", value: actualValue[0].dataValues.presion },
-        { name: "viento", value: actualValue[0].dataValues.velocidad },
-        { name: "direccion", value: actualValue[0].dataValues.direccion },
-      ],
+
+  const restOfDayPredictions: SQLTesjoResponse[] = await Prediction.findAll({
+    where: {
+      fecha: {
+        [Op.eq]: currentDate.toISOString(),
+      },
+      hora: {
+        [Op.gte]: currentHour,
+      },
     },
-    next48: [],
-    week: [],
+    limit: (24 - currentHour) * 60,
+    order: [["timestamp", "ASC"]],
+  });
+
+  const nextDayPredictions: SQLTesjoResponse[] = await Prediction.findAll({
+    where: {
+      fecha: {
+        [Op.eq]: nextDate.toISOString(),
+      },
+    },
+    limit: 24 * 60,
+    order: [["timestamp", "ASC"]],
+  });
+
+  const secondNextDayPredictions: SQLTesjoResponse[] = await Prediction.findAll(
+    {
+      where: {
+        fecha: {
+          [Op.eq]: secondNextDate.toISOString(),
+        },
+        hora: {
+          [Op.lt]: currentHour,
+        },
+      },
+      limit: currentHour * 60,
+      order: [["timestamp", "ASC"]],
+    }
+  );
+
+  const next48PredictionFirst = restOfDayPredictions.filter(
+    (_, index) => index % 60 === 0
+  );
+  const next48PredictionsSecond = nextDayPredictions.filter(
+    (_, index) => index % 60 === 0
+  );
+  const next48PredictionsThird = secondNextDayPredictions.filter(
+    (_, index) => index % 60 === 0
+  );
+
+  const next48HoursPredictions = [
+    ...next48PredictionFirst,
+    ...next48PredictionsSecond,
+    ...next48PredictionsThird,
+  ];
+
+  const actual = {
+    hora: actualValue.dataValues.hora,
+    date: actualValue.dataValues.fecha,
+    temperatura: actualValue.dataValues.temperatura,
+    estado_tiempo: determineWeatherState(actualValue.dataValues),
+    porcentaje_lluvia: calculateRainProbability(actualValue.dataValues),
+    confort: [
+      { name: "humedad", value: actualValue.dataValues.humedad },
+      { name: "lluvia", value: actualValue.dataValues.lluvia },
+      { name: "luz", value: actualValue.dataValues.luz },
+      { name: "presion", value: actualValue.dataValues.presion },
+      { name: "viento", value: actualValue.dataValues.velocidad },
+      { name: "direccion", value: actualValue.dataValues.direccion },
+    ],
+  };
+
+  const next48 = next48HoursPredictions.map((value) => ({
+    hora: value.dataValues.hora,
+    date: value.dataValues.fecha,
+    temperatura: value.dataValues.temperatura,
+    estado_tiempo: determineWeatherState(value.dataValues),
+    porcentaje_lluvia: calculateRainProbability(value.dataValues),
+    confort: [
+      { name: "humedad", value: value.dataValues.humedad },
+      { name: "lluvia", value: value.dataValues.lluvia },
+      { name: "luz", value: value.dataValues.luz },
+      { name: "presion", value: value.dataValues.presion },
+      { name: "viento", value: value.dataValues.velocidad },
+      { name: "direccion", value: value.dataValues.direccion },
+    ],
+  }));
+  let dates = [];
+  for (let i = 0; i < 7; i++) {
+    let date = moment().tz("America/Mexico_City").startOf("day").add(i, "days");
+    dates.push(date);
+  }
+
+  let week = [];
+  for (let date of dates) {
+    let forecasts = await Prediction.findAll({
+      where: {
+        fecha: {
+          [Op.between]: [
+            date.startOf("day").toISOString(),
+            date.endOf("day").toISOString(),
+          ],
+        },
+      },
+      order: [["timestamp", "DESC"]],
+    });
+
+    if (forecasts.length > 0) {
+      let minTemp = forecasts.reduce(
+        (min: any, p: any) =>
+          p.dataValues.temperatura < min ? p.dataValues.temperatura : min,
+        forecasts[0].dataValues.temperatura
+      );
+      let maxTemp = forecasts.reduce(
+        (max: any, p: any) =>
+          p.dataValues.temperatura > max ? p.dataValues.temperatura : max,
+        forecasts[0].dataValues.temperatura
+      );
+
+      week.push({
+        dia: date.format("dddd"),
+        fecha: date.format("YYYY-MM-DD"),
+        pronostico: determineWeatherState(forecasts[0].dataValues),
+        temperatura_minima: minTemp,
+        temperatura_maxima: maxTemp,
+      });
+    }
+  }
+
+  const response: landingProps = {
+    actual: actual,
+    next48: next48,
+    week: week,
   };
   res.status(200).json(response);
 });

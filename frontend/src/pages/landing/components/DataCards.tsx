@@ -21,7 +21,9 @@ const DataCards = ({ data }: DataCardsProps) => {
               className="text-center"
             >
               <Card.Body>
-                <Card.Title>{dato.name}</Card.Title>
+                <Card.Title style={{ textTransform: "capitalize" }}>
+                  {dato.name}
+                </Card.Title>
                 <GetChart name={dato.name} value={dato.value} />
                 <Card.Text>{dato.value}</Card.Text>
               </Card.Body>
