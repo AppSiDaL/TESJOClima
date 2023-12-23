@@ -235,7 +235,7 @@ weatherRouter.get("/landing", async (_req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-weatherRouter.get("/todayPronostic", async (_req: Request, res: Response) => {
+weatherRouter.get("/now", async (_req: Request, res: Response) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -287,29 +287,28 @@ weatherRouter.get("/todayPronostic", async (_req: Request, res: Response) => {
         });
       }
     }
-    const todayPronostic: [] = await Weather.findAll({
-      limit: 1,
+    const todayPronostic = await Weather.findOne({
       order: [["timestamp", "DESC"]],
     });
     const airQuality = await aqiService.getAirQuality();
-    const todayPronosticFormatted = todayPronostic.map((value: any) => ({
-      hora: value.dataValues.hora,
-      date: value.dataValues.fecha,
-      tempeture: value.dataValues.temperatura,
+    const todayPronosticFormatted = {
+      hora: todayPronostic.dataValues.hora,
+      date: todayPronostic.dataValues.fecha,
+      tempeture: todayPronostic.dataValues.temperatura,
       airQuality: airQuality,
       sunrise: getSunsetSunrise().sunrise,
       sunset: getSunsetSunrise().sunset,
-      estado_tiempo: determineWeatherState(value.dataValues),
-      porcentaje_lluvia: calculateRainProbability(value.dataValues),
+      estado_tiempo: determineWeatherState(todayPronostic.dataValues),
+      porcentaje_lluvia: calculateRainProbability(todayPronostic.dataValues),
       confort: [
-        { name: "humedad", value: value.dataValues.humedad },
-        { name: "lluvia", value: value.dataValues.lluvia },
-        { name: "luz", value: value.dataValues.luz },
-        { name: "presion", value: value.dataValues.presion },
-        { name: "viento", value: value.dataValues.velocidad },
-        { name: "direccion", value: value.dataValues.direccion },
+        { name: "humedad", value: todayPronostic.dataValues.humedad },
+        { name: "lluvia", value: todayPronostic.dataValues.lluvia },
+        { name: "luz", value: todayPronostic.dataValues.luz },
+        { name: "presion", value: todayPronostic.dataValues.presion },
+        { name: "viento", value: todayPronostic.dataValues.velocidad },
+        { name: "direccion", value: todayPronostic.dataValues.direccion },
       ],
-    }));
+    };
 
     const currentHour = new Date().getHours();
 
