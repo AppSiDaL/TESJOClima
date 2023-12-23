@@ -47,11 +47,11 @@ const HourCard = ({ values }: HourCardProps) => {
             </Col>
             <Col className="d-flex align-items-center">
               <WeatherIcon
-                estadoTiempo={values.condiciones}
+                estadoTiempo={values.estado_tiempo}
                 width="50px"
                 height="50px"
               />
-              <p>{values.condiciones}</p>
+              <p>{values.estado_tiempo}</p>
             </Col>
             <Col>
               <p>

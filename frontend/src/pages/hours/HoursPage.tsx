@@ -23,7 +23,16 @@ const HoursPage = () => {
   }
 
   const hours: hoursValues[] = result.data;
-
+  const date = new Date();
+  const days = [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ];
   return (
     <Container
       className={theme + " justify-content-center align-items-center"}
@@ -34,11 +43,20 @@ const HoursPage = () => {
           Pronostico por hora <strong>Jocotitlan</strong>
         </Card.Header>
         <Card.Body>
+          <div>
+            <h2>{days[date.getDay()] + " " + date.toLocaleDateString()}</h2>
+          </div>
           {hours.map((hour, index) => {
-            if (hour.hora === "0:00") {
+            const [year, month, day] = hour.date.split("-").map(Number);
+            const dateDate = new Date(year, month - 1, day);
+            if (hour.hora === 0) {
               return (
                 <div key={index}>
-                  <h2>Sabado {hour.date}</h2>
+                  <h2>
+                    {days[dateDate.getDay()] +
+                      " " +
+                      dateDate.toLocaleDateString()}
+                  </h2>
                   <HourCard values={hour} />
                 </div>
               );

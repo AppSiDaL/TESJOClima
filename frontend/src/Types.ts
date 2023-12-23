@@ -39,9 +39,9 @@ export interface confortValues {
 }
 
 export interface hoursValues {
-  hora: string;
+  hora: number;
   date: string;
-  condiciones: string;
+  estado_tiempo: string;
   temperatura: number;
   probabilidad_de_lluvia: number;
   velocidad_viento: number;

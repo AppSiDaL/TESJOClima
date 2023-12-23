@@ -6,7 +6,6 @@ import {
   determineWeatherState,
   getSunsetSunrise,
 } from "../utils/weather";
-const mockData = require("./mockData");
 const { Weather, Prediction } = require("../models");
 const moment = require("moment-timezone");
 import { Op } from "sequelize";
@@ -404,7 +403,80 @@ weatherRouter.get("/now", async (_req: Request, res: Response) => {
 });
 
 weatherRouter.get("/hours", async (_req: Request, res: Response) => {
-  res.json(mockData.hours);
+  const currentHour = moment().tz("America/Mexico_City").hour();
+  const currentDate = moment().tz("America/Mexico_City").startOf("day");
+  const nextDate = moment(currentDate).add(1, "day");
+  const secondNextDate = moment(currentDate).add(2, "day");
+
+  const restOfDayPredictions: SQLTesjoResponse[] = await Prediction.findAll({
+    where: {
+      fecha: {
+        [Op.eq]: currentDate.toISOString(),
+      },
+      hora: {
+        [Op.gte]: currentHour,
+      },
+    },
+    limit: (24 - currentHour) * 60,
+    order: [["timestamp", "ASC"]],
+  });
+
+  const nextDayPredictions: SQLTesjoResponse[] = await Prediction.findAll({
+    where: {
+      fecha: {
+        [Op.eq]: nextDate.toISOString(),
+      },
+    },
+    limit: 24 * 60,
+    order: [["timestamp", "ASC"]],
+  });
+
+  const secondNextDayPredictions: SQLTesjoResponse[] = await Prediction.findAll(
+    {
+      where: {
+        fecha: {
+          [Op.eq]: secondNextDate.toISOString(),
+        },
+        hora: {
+          [Op.lt]: currentHour,
+        },
+      },
+      limit: currentHour * 60,
+      order: [["timestamp", "ASC"]],
+    }
+  );
+
+  const next48PredictionFirst = restOfDayPredictions.filter(
+    (_, index) => index % 60 === 0
+  );
+  const next48PredictionsSecond = nextDayPredictions.filter(
+    (_, index) => index % 60 === 0
+  );
+  const next48PredictionsThird = secondNextDayPredictions.filter(
+    (_, index) => index % 60 === 0
+  );
+
+  const next48HoursPredictions = [
+    ...next48PredictionFirst,
+    ...next48PredictionsSecond,
+    ...next48PredictionsThird,
+  ];
+
+  const next48 = next48HoursPredictions.map((value) => ({
+    hora: value.dataValues.hora,
+    date: value.dataValues.fecha,
+    temperatura: value.dataValues.temperatura,
+    estado_tiempo: determineWeatherState(value.dataValues),
+    porcentaje_lluvia: calculateRainProbability(value.dataValues),
+    velocidad_viento: value.dataValues.velocidad,
+    direccion_viento: value.dataValues.direccion,
+    humedad: value.dataValues.humedad,
+    luz: value.dataValues.luz,
+    presion: value.dataValues.presion,
+    lluvia: value.dataValues.lluvia,
+  }));
+
+  res.status(200).json(next48);
 });
 
 module.exports = weatherRouter;
