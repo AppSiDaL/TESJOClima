@@ -60,7 +60,7 @@ const NowPage = () => {
         <Col sm={3}>
           <AirQuality values={now.confortValues} />
           <div style={{ height: 5 }} />
-          <SunriseSunset />
+          <SunriseSunset values={now.confortValues} />
         </Col>
       </Row>
     </Container>

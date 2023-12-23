@@ -140,8 +140,8 @@ export const SunriseSunsetIcon = () => {
       };
     }
   }, []);
-
-  const frameNumber = 2000;
+const time= new Date().getHours();
+const frameNumber = time*100;
   return (
     <div ref={containerRef}></div>
   );
