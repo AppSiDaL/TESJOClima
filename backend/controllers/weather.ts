@@ -4,11 +4,13 @@ import { SQLTesjoResponse, landingProps } from "../types";
 import {
   calculateRainProbability,
   determineWeatherState,
+  getSunsetSunrise,
 } from "../utils/weather";
 const mockData = require("./mockData");
 const { Weather, Prediction } = require("../models");
 const moment = require("moment-timezone");
 import { Op } from "sequelize";
+import aqiService from "../services/aqiService";
 
 weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
   try {
@@ -233,8 +235,92 @@ weatherRouter.get("/landing", async (_req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-weatherRouter.get("/now", async (_req: Request, res: Response) => {
-  res.json(mockData.now);
+weatherRouter.get("/todayPronostic", async (_req: Request, res: Response) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const moments = {
+      madrugada: { start: 0, end: 6 },
+      mañana: { start: 6, end: 12 },
+      tarde: { start: 12, end: 18 },
+      noche: { start: 18, end: 24 },
+    };
+
+    const formattedPronostics = [];
+    for (let moment in moments) {
+      const start = new Date(today);
+      start.setHours(moments[moment as keyof typeof moments].start, 0, 0, 0);
+      const end = new Date(today);
+      end.setHours(moments[moment as keyof typeof moments].end, 0, 0, 0);
+
+      let pronostic;
+      if (new Date() < end) {
+        pronostic = await Weather.findOne({
+          where: {
+            fecha: {
+              [Op.between]: [start, end],
+            },
+          },
+          order: [["fecha", "DESC"]],
+        });
+      } else {
+        pronostic = await Prediction.findOne({
+          where: {
+            fecha: {
+              [Op.between]: [start, end],
+            },
+          },
+          order: [["fecha", "DESC"]],
+        });
+      }
+
+      if (pronostic) {
+        formattedPronostics.push({
+          momento: moment,
+          fecha: pronostic.dataValues.fecha,
+          temperatura: pronostic.dataValues.temperatura,
+          tiempo: determineWeatherState(pronostic.dataValues),
+          probabilidad_de_lluvia: calculateRainProbability(
+            pronostic.dataValues
+          ),
+        });
+      }
+    }
+    const todayPronostic: [] = await Weather.findAll({
+      limit: 1,
+      order: [["timestamp", "DESC"]],
+    });
+    const airQuality = await aqiService.getAirQuality();
+    const todayPronosticFormatted = todayPronostic.map((value: any) => ({
+      hora: value.dataValues.hora,
+      date: value.dataValues.fecha,
+      tempeture: value.dataValues.temperatura,
+      airQuality: airQuality,
+      sunrise: getSunsetSunrise().sunrise,
+      sunset: getSunsetSunrise().sunset,
+      estado_tiempo: determineWeatherState(value.dataValues),
+      porcentaje_lluvia: calculateRainProbability(value.dataValues),
+      confort: [
+        { name: "humedad", value: value.dataValues.humedad },
+        { name: "lluvia", value: value.dataValues.lluvia },
+        { name: "luz", value: value.dataValues.luz },
+        { name: "presion", value: value.dataValues.presion },
+        { name: "viento", value: value.dataValues.velocidad },
+        { name: "direccion", value: value.dataValues.direccion },
+      ],
+    }));
+    const response = {
+      todayPronostic: formattedPronostics,
+      confortValues: todayPronosticFormatted,
+    };
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the pronostics." });
+  }
 });
 
 weatherRouter.get("/hours", async (_req: Request, res: Response) => {

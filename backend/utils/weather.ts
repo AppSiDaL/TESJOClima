@@ -1,4 +1,11 @@
 import { TesjoValues, climaticStatesValues } from "../types";
+import { getSunrise, getSunset } from 'sunrise-sunset-js';
+
+export const getSunsetSunrise = () => {
+  const sunset = getSunset(19.6756755257324, -99.80186197311394);
+  const sunrise = getSunrise(19.6756755257324, -99.80186197311394);
+  return { sunset, sunrise }
+}
 
 
 export const determineWeatherState = (
