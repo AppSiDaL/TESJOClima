@@ -12,7 +12,6 @@ export const determineWeatherState = (
   weatherData: TesjoValues
 ): climaticStatesValues["name"] => {
   const { temperatura, lluvia, luz, hora } = weatherData;
-
   const isDaytime = Number(hora) >= 6 && Number(hora) <= 18;
   const isRaining = lluvia > 0;
   const isCloudy = luz < 50; // Suponemos que un nivel de luz bajo indica nubes

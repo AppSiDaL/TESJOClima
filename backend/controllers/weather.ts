@@ -310,11 +310,92 @@ weatherRouter.get("/todayPronostic", async (_req: Request, res: Response) => {
         { name: "direccion", value: value.dataValues.direccion },
       ],
     }));
+
+    const currentHour = new Date().getHours();
+
+    const hours = [
+      currentHour + 1,
+      currentHour + 2,
+      currentHour + 3,
+      currentHour + 4,
+    ];
+
+    const hourPronostics = [];
+    for (let hour of hours) {
+      const nextHour = hour + 1;
+
+      const pronostic = await Prediction.findOne({
+        where: {
+          fecha: new Date(),
+          hora: {
+            [Op.gte]: hour,
+            [Op.lt]: nextHour,
+          },
+        },
+        order: [
+          ["fecha", "DESC"],
+          ["hora", "DESC"],
+          ["minuto", "DESC"],
+        ],
+      });
+
+      if (pronostic) {
+        hourPronostics.push({
+          momento: `${hour}:00`,
+          fecha: pronostic.dataValues.fecha,
+          temperatura: pronostic.dataValues.temperatura,
+          tiempo: determineWeatherState(pronostic.dataValues),
+          probabilidad_de_lluvia: calculateRainProbability(
+            pronostic.dataValues
+          ),
+        });
+      }
+    }
+
+    const currentDate = new Date();
+
+    const days = [1, 2, 3, 4, 5];
+
+    const dialyPronostics = [];
+    for (let day of days) {
+      const start = new Date(currentDate);
+      start.setDate(currentDate.getDate() + day);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(currentDate);
+      end.setDate(currentDate.getDate() + day);
+      end.setHours(23, 59, 59, 999);
+
+      const pronostic = await Prediction.findOne({
+        where: {
+          fecha: {
+            [Op.between]: [start, end],
+          },
+        },
+        order: [["fecha", "DESC"]],
+      });
+
+      if (pronostic) {
+        dialyPronostics.push({
+          momento: `${start.getDate()}/${
+            start.getMonth() + 1
+          }/${start.getFullYear()}`,
+          temperatura: pronostic.dataValues.temperatura,
+          tiempo: determineWeatherState(pronostic.dataValues),
+          probabilidad_de_lluvia: calculateRainProbability(
+            pronostic.dataValues
+          ),
+        });
+      }
+    }
+
     const response = {
       todayPronostic: formattedPronostics,
       confortValues: todayPronosticFormatted,
+      hourPronostic: hourPronostics,
+      dialyPronostics: dialyPronostics,
     };
-    res.json(response);
+
+    res.status(200).json(response);
   } catch (error) {
     console.error(error);
     res
