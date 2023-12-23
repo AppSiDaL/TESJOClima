@@ -10,7 +10,7 @@ const getBackground = () => {
 
   if (hour >= 19 || hour < 6) {
     bgImage = night;
-  } else if (hour >= 18) {
+  } else if (hour >= 16) {
     bgImage = sunset;
   } else if (hour >= 10) {
     bgImage = day;
@@ -28,7 +28,7 @@ const getGradient = () => {
 
   if (hour >= 19 || hour < 6) {
     gradient = "night";
-  } else if (hour >= 18) {
+  } else if (hour >= 16) {
     gradient = "sunset";
   } else if (hour >= 10) {
     gradient = "day";
@@ -45,7 +45,7 @@ const getTimeRange = () => {
 
   if (hour >= 19 || hour < 6) {
     range = "Night";
-  } else if (hour >= 18) {
+  } else if (hour >= 16) {
     range = "Sunset";
   } else if (hour >= 10) {
     range = "Day";
@@ -63,7 +63,7 @@ const getColor = () => {
 
   if (hour >= 19 || hour < 6) {
     color = "#6F6175";
-  } else if (hour >= 18) {
+  } else if (hour >= 16) {
     color = "#EB7812";
   } else if (hour >= 10) {
     color = "#2545C7";
