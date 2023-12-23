@@ -5,9 +5,21 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import TESJOLogo from "../assets/LogoTESJO.jpg";
 import Image from "react-bootstrap/Image";
-import { Link } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
+import { useState } from "react";
 const NavigationBar = () => {
-  const date = new Date();
+  const [input, setInput] = useState<string>();
+  const match = useMatch("/search/:ts");
+
+  console.log(match);
+  const navigate = useNavigate();
+  const handleSearch = () => {
+    if (input) {
+      const timestamp = new Date(input).getTime();
+      navigate(`/search/${timestamp}`);
+    }
+  };
+  const date = match ? new Date(match.params.ts ?? "") : new Date();
   return (
     <div style={{ background: "#005986", color: "white" }}>
       <Navbar expand="lg">
@@ -40,17 +52,20 @@ const NavigationBar = () => {
             <Container fluid>
               <div className="text-center">
                 Tecnologico de Estudios Superiores, Jocotitlan, Edo. Mexico. a
-                {" " + date.toDateString()}
+                {" "+date.toDateString()}
               </div>
             </Container>
             <Form className="d-flex">
               <Form.Control
                 type="datetime-local"
                 placeholder="Search"
+                onChange={(e) => setInput(e.target.value)}
                 className="me-2"
                 aria-label="Search"
               />
-              <Button variant="outline-success">Search</Button>
+              <Button variant="outline-success" onClick={handleSearch}>
+                Search
+              </Button>
             </Form>
           </Navbar.Collapse>
         </Container>

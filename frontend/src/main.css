@@ -10,6 +10,18 @@
   background-attachment: fixed; /* Agregar esta línea */
 }
 
+.sunset {
+  background: rgb(115, 95, 113);
+  background: linear-gradient(
+    180deg,
+    rgba(115, 95, 113, 1) 5%,
+    rgba(171, 161, 157, 1) 53%,
+    rgba(223, 103, 88, 1) 98%,
+    rgba(101, 73, 83, 1) 100%
+  );
+  background-attachment: fixed; /* Agregar esta línea */
+}
+
 .day {
   background: rgb(200, 222, 236);
   background: linear-gradient(

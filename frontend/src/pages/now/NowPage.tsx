@@ -13,6 +13,7 @@ import weatherService from "../../services/weather";
 import { WeatherIcon } from "../../utils/WeatherIcon";
 import SunriseSunset from "./components/SunSetSunRise";
 import Theme from "../../utils/Theme";
+
 const NowPage = () => {
   const result = useQuery({
     queryKey: ["now"],
