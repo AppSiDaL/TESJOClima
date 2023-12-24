@@ -19,7 +19,7 @@ export default function AirQualityTexts({
   if (airQuality >= 51 && airQuality <= 100) {
     return (
       <>
-        <h1 style={{ color:"yellow" }}>{airQuality}</h1>
+        <h1 style={{ color:"#E3E000" }}>{airQuality}</h1>
         <Card.Text>
           La calidad del aire es aceptable, aunque para algunos contaminantes
           puede haber un problema de salud moderado para un número muy pequeño

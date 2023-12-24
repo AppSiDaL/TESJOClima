@@ -243,7 +243,7 @@ weatherRouter.get("/now", async (_req: Request, res: Response) => {
       madrugada: { start: 0, end: 6 },
       mañana: { start: 6, end: 12 },
       tarde: { start: 12, end: 18 },
-      noche: { start: 18, end: 24 },
+      noche: { start: 18, end: 23 },
     };
 
     const formattedPronostics = [];
@@ -255,25 +255,32 @@ weatherRouter.get("/now", async (_req: Request, res: Response) => {
 
       let pronostic;
       if (new Date() < end) {
-        pronostic = await Weather.findOne({
-          where: {
-            fecha: {
-              [Op.between]: [start, end],
-            },
-          },
-          order: [["fecha", "DESC"]],
-        });
-      } else {
+        console.log("Prediction----------------",moment)
         pronostic = await Prediction.findOne({
           where: {
             fecha: {
               [Op.between]: [start, end],
             },
+            hora: {
+              [Op.between]: [start.getHours(), end.getHours()],
+            },
+          },
+          order: [["fecha", "DESC"]],
+        });
+      } else {
+        console.log("Weather----------------",moment)
+        pronostic = await Weather.findOne({
+          where: {
+            fecha: {
+              [Op.between]: [start, end],
+            },
+            hora: {
+              [Op.between]: [start.getHours(), end.getHours()],
+            },
           },
           order: [["fecha", "DESC"]],
         });
       }
-
       if (pronostic) {
         formattedPronostics.push({
           momento: moment,
