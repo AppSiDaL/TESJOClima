@@ -8,6 +8,7 @@ import Theme from "../../utils/Theme";
 import { useQuery } from "react-query";
 import weatherService from "../../services/weather";
 import { WeatherIcon } from "../../utils/WeatherIcon";
+import { Tab, Tabs } from "react-bootstrap";
 
 const LangingPage = () => {
   const backgroundImage = Theme.getBackground();
@@ -21,8 +22,8 @@ const LangingPage = () => {
       <div
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundSize:"cover",
-        backgroundAttachment:"fixed",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
           backgroundRepeat: "no-repeat",
           color: "white",
         }}
@@ -38,7 +39,7 @@ const LangingPage = () => {
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
-        backgroundAttachment:"fixed",
+        backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         color: "white",
       }}
@@ -47,6 +48,19 @@ const LangingPage = () => {
       <TodayScroll datosClimaticos={landing.next48} />
       <WeekScroll datosClimaticos={landing.week} />
       <div className="container text-center">
+        <Tabs
+          defaultActiveKey="profile"
+          id="justify-tab-example"
+          className="mb-3"
+          justify
+        >
+          <Tab eventKey="first" title="Today">
+            <WeekChart datosClimaticos={landing.week} />
+          </Tab>
+          <Tab eventKey="second" title="Week">
+            <DataCards data={landing.actual} />
+          </Tab>
+        </Tabs>
         <WeekChart datosClimaticos={landing.week} />
         <DataCards data={landing.actual} />
       </div>

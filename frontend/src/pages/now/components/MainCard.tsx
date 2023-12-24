@@ -41,7 +41,7 @@ const MainCard = ({ values }: MainCardProps) => {
               <WeatherIcon
                 height="100px"
                 width="100px"
-                estadoTiempo="cloudy-heavyRain"
+                estadoTiempo={(values as any).estado_tiempo}
               />
             </Col>
           </Row>
