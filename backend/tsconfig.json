@@ -1,17 +1,18 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
+    "skipLibCheck": true,
       "types": [
-        "node"
-      ],
-      "moduleDetection": "force",
-      "target": "ES6",
-      "outDir": "./public/",
-      "module": "commonjs",
-      "strict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noImplicitReturns": true,
-      "noFallthroughCasesInSwitch": true,
-      "esModuleInterop": true
-    },
-  }
+      "node"
+    ],
+    "moduleDetection": "force",
+    "target": "ES6",
+    "outDir": "./public/",
+    "module": "commonjs",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true
+  },
+}

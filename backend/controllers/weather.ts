@@ -255,7 +255,6 @@ weatherRouter.get("/now", async (_req: Request, res: Response) => {
 
       let pronostic;
       if (new Date() < end) {
-        console.log("Prediction----------------",moment)
         pronostic = await Prediction.findOne({
           where: {
             fecha: {
@@ -268,7 +267,6 @@ weatherRouter.get("/now", async (_req: Request, res: Response) => {
           order: [["fecha", "DESC"]],
         });
       } else {
-        console.log("Weather----------------",moment)
         pronostic = await Weather.findOne({
           where: {
             fecha: {

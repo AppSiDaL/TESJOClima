@@ -55,13 +55,27 @@ const LangingPage = () => {
           justify
         >
           <Tab eventKey="first" title="Today">
-            <WeekChart datosClimaticos={landing.week} />
+            <Tabs
+              defaultActiveKey="profile"
+              id="justify-tab-example"
+              className="mb-3"
+              justify
+            >
+              <Tab eventKey="first" title="Today">
+                <WeekChart datosClimaticos={landing.week} />
+              </Tab>
+              <Tab eventKey="second" title="Week">
+                <DataCards data={landing.actual} />
+              </Tab>
+              <Tab eventKey="second" title="Week">
+                <DataCards data={landing.actual} />
+              </Tab>
+            </Tabs>
           </Tab>
           <Tab eventKey="second" title="Week">
             <DataCards data={landing.actual} />
           </Tab>
         </Tabs>
-        <WeekChart datosClimaticos={landing.week} />
         <DataCards data={landing.actual} />
       </div>
     </div>

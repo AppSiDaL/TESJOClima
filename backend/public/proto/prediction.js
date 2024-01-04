@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9,31 +32,51 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tf = require("@tensorflow/tfjs");
-const Weather = require("../models/weather");
-// Crear un modelo secuencial.
-const model = tf.sequential();
-// Añadir una capa densa (fully connected) al modelo.
-model.add(tf.layers.dense({ units: 100, activation: "relu", inputShape: [10] }));
-model.add(tf.layers.dense({ units: 1 }));
-// Compilar el modelo.
-model.compile({ loss: "meanSquaredError", optimizer: "sgd" });
-// Hacer una consulta a la base de datos.
-Weather.findAll({}).then((results) => {
-    // Convertir los resultados en tensores.
-    const xs = tf.tensor2d(results.map((result) => [
-        result.feature1,
-        result.feature2,
-        // ...añadir todas las características aquí...
-    ]));
-    const ys = tf.tensor2d(results.map((result) => [result.target]));
-    // Entrenar el modelo.
-    model.fit(xs, ys, {
-        epochs: 100,
-        callbacks: {
-            onEpochEnd: (epoch, log) => __awaiter(void 0, void 0, void 0, function* () {
-                console.log(`Epoch ${epoch}: loss = ${log.loss}`);
-            }),
-        },
+const tf = __importStar(require("@tensorflow/tfjs-node"));
+const { Weather } = require("../models");
+function predict() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Cargar el modelo.
+        const model = yield tf.loadLayersModel("file://.//model.json");
+        const results = yield Weather.findAll({
+            limit: 1,
+            order: [["timestamp", "DESC"]],
+        });
+        if (results.length === 0) {
+            console.error("No hay datos disponibles para hacer predicciones.");
+            return;
+        }
+        const inputData = [
+            Number(results[0].dataValues.timestamp),
+            Number(results[0].dataValues.hora),
+            Number(results[0].dataValues.minuto),
+            Number(results[0].dataValues.direccion),
+            Number(results[0].dataValues.humedad),
+            Number(results[0].dataValues.lluvia),
+            Number(results[0].dataValues.luz),
+            Number(results[0].dataValues.presion),
+            Number(results[0].dataValues.temperatura),
+            Number(results[0].dataValues.velocidad),
+        ];
+        // Normalizar los datos de entrada directamente
+        const normalizedInput = tf.tensor2d([inputData]).div(1000); // Ajusta este valor según sea necesario
+        // Hacer la predicción
+        const output = model.predict(normalizedInput);
+        // Desnormalizar los resultados (ajusta según tu proceso de entrenamiento)
+        const outputData = output
+            .mul(1000) // Ajusta este valor según sea necesario
+            .arraySync()[0];
+        // Imprimir los resultados desnormalizados
+        console.log(`Timestamp: ${outputData[0]}`);
+        console.log(`Hora: ${outputData[1]}`);
+        console.log(`Minuto: ${outputData[2]}`);
+        console.log(`Dirección: ${outputData[3]}`);
+        console.log(`Humedad: ${outputData[4]}`);
+        console.log(`Lluvia: ${outputData[5]}`);
+        console.log(`Luz: ${outputData[6]}`);
+        console.log(`Presión: ${outputData[7]}`);
+        console.log(`Temperatura: ${outputData[8]}`);
+        console.log(`Velocidad: ${outputData[9]}`);
     });
-});
+}
+predict();
