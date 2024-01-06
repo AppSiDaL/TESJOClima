@@ -11,7 +11,6 @@ const NavigationBar = () => {
   const [input, setInput] = useState<string>();
   const match = useMatch("/search/:ts");
 
-  console.log(match);
   const navigate = useNavigate();
   const handleSearch = () => {
     if (input) {
@@ -42,17 +41,21 @@ const NavigationBar = () => {
               <Nav.Link as={Link} to="/" className="text-light">
                 Dashboard
               </Nav.Link>
-              <Nav.Link as={Link} to="/now" className="text-light">
-                Now
-              </Nav.Link>
-              <Nav.Link as={Link} to="/hours" className="text-light">
-                Hours
-              </Nav.Link>
+              {!match?.params.ts && (
+                <>
+                  <Nav.Link as={Link} to="/now" className="text-light">
+                    Now
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/hours" className="text-light">
+                    Hours
+                  </Nav.Link>
+                </>
+              )}
             </Nav>
             <Container fluid>
               <div className="text-center">
                 Tecnologico de Estudios Superiores, Jocotitlan, Edo. Mexico. a
-                {" "+date.toDateString()}
+                {" " + date.toDateString()}
               </div>
             </Container>
             <Form className="d-flex">

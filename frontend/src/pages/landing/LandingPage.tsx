@@ -2,13 +2,12 @@ import Header from "./components/Header";
 import TodayScroll from "./components/TodayScroll";
 import { landingProps } from "../../Types";
 import WeekScroll from "./components/WeekScroll";
-import WeekChart from "../../charts/WeekChart";
-import DataCards from "./components/DataCards";
 import Theme from "../../utils/Theme";
 import { useQuery } from "react-query";
 import weatherService from "../../services/weather";
 import { WeatherIcon } from "../../utils/WeatherIcon";
-import { Tab, Tabs } from "react-bootstrap";
+import TabsComponent from "./components/TabsComponent";
+import DataCards from "./components/DataCards";
 
 const LangingPage = () => {
   const backgroundImage = Theme.getBackground();
@@ -47,37 +46,8 @@ const LangingPage = () => {
       <Header data={landing.actual} />
       <TodayScroll datosClimaticos={landing.next48} />
       <WeekScroll datosClimaticos={landing.week} />
-      <div className="container text-center">
-        <Tabs
-          defaultActiveKey="profile"
-          id="justify-tab-example"
-          className="mb-3"
-          justify
-        >
-          <Tab eventKey="first" title="Today">
-            <Tabs
-              defaultActiveKey="profile"
-              id="justify-tab-example"
-              className="mb-3"
-              justify
-            >
-              <Tab eventKey="first" title="Today">
-                <WeekChart datosClimaticos={landing.week} />
-              </Tab>
-              <Tab eventKey="second" title="Week">
-                <DataCards data={landing.actual} />
-              </Tab>
-              <Tab eventKey="second" title="Week">
-                <DataCards data={landing.actual} />
-              </Tab>
-            </Tabs>
-          </Tab>
-          <Tab eventKey="second" title="Week">
-            <DataCards data={landing.actual} />
-          </Tab>
-        </Tabs>
-        <DataCards data={landing.actual} />
-      </div>
+      <TabsComponent landing={landing} />
+      <DataCards data={landing.actual} />
     </div>
   );
 };
