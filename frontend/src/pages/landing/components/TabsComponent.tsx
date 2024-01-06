@@ -1,7 +1,9 @@
 import { Tab, Tabs } from "react-bootstrap";
-import WeekChart from "../../../charts/WeekChart";
 import DataCards from "./DataCards";
 import { landingProps } from "../../../Types";
+import TempetureChart from "../../../charts/TempetureChart";
+import RainChart from "../../../charts/RainChart";
+import WindChart from "../../../charts/WindChart";
 interface tabsComponentProps {
   landing: landingProps;
 }
@@ -23,12 +25,13 @@ export default function TabsComponent({ landing }: tabsComponentProps) {
             justify
           >
             <Tab eventKey="todayTempeture" title="Temperatura">
-              <WeekChart datosClimaticos={landing.week} />
+              <TempetureChart datosClimaticos={landing.week} />
             </Tab>
             <Tab eventKey="todayLluvia" title="Lluvia">
-              <DataCards data={landing.actual} />
+              <RainChart />
             </Tab>
             <Tab eventKey="todayViento" title="Viento">
+              <WindChart />
               <DataCards data={landing.actual} />
             </Tab>
           </Tabs>

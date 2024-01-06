@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import TodayScroll from "./components/TodayScroll";
 import { landingProps } from "../../Types";
 import WeekScroll from "./components/WeekScroll";
-import WeekChart from "../../charts/WeekChart";
+import WeekChart from "../../charts/TempetureChart";
 import DataCards from "./components/DataCards";
 import Theme from "../../utils/Theme";
 import { useQuery } from "react-query";

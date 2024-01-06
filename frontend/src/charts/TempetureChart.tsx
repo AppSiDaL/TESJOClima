@@ -16,7 +16,7 @@ interface WeekChartProps {
   datosClimaticos: DatosClimaticosSemanales[];
 }
 
-const WeekChart: React.FC<WeekChartProps> = ({ datosClimaticos }) => {
+const TempetureChart: React.FC<WeekChartProps> = ({ datosClimaticos }) => {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart
@@ -53,4 +53,4 @@ const WeekChart: React.FC<WeekChartProps> = ({ datosClimaticos }) => {
   );
 };
 
-export default WeekChart;
+export default TempetureChart;
