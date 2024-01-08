@@ -13,7 +13,7 @@ import { CustomTooltip } from "./components/CustomToolTip";
 import { DatosClimaticosSemanales } from "../Types";
 
 interface WeekChartProps {
-  datosClimaticos: DatosClimaticosSemanales[];
+  datosClimaticos: any[];
 }
 
 const TempetureChart: React.FC<WeekChartProps> = ({ datosClimaticos }) => {

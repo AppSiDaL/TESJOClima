@@ -25,7 +25,7 @@ export default function TabsComponent({ landing }: tabsComponentProps) {
             justify
           >
             <Tab eventKey="todayTempeture" title="Temperatura">
-              <TempetureChart datosClimaticos={landing.week} />
+              <TempetureChart datosClimaticos={landing.next48} />
             </Tab>
             <Tab eventKey="todayLluvia" title="Lluvia">
               <RainChart />
