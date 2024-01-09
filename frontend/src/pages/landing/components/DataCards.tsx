@@ -15,7 +15,7 @@ const DataCards = ({ data }: DataCardsProps) => {
               style={{
                 width: "20rem",
                 backgroundColor: "transparent",
-                borderColor: "black",
+                borderColor: "white",
                 color: "white",
               }}
               className="text-center"

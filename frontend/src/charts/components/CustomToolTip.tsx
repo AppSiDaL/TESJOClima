@@ -11,13 +11,26 @@ export const CustomTooltip = ({
 }: TooltipProps<ValueType, NameType>) => {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tooltip">
-        <p className="label">{label}</p>
+      <div
+        className="custom-tooltip"
+        style={{
+          color: "white",
+          border: 2,
+          borderColor: "white",
+          borderStyle: "dashed",
+        }}
+      >
+        <p className="label">{label}:00</p>
         <div>
-          {payload.map((pld,) => (
-            <div key={pld.dataKey} style={{ display: "inline-block", padding: 10 }}>
-              <div style={{ color: pld.color }}>{pld.value}</div>
-              <div style={{ color: "black" }}>{pld.dataKey}</div>
+          {payload.map((pld) => (
+            <div
+              key={pld.dataKey}
+              style={{ display: "inline-block", padding: 10 }}
+            >
+              <div style={{ color: pld.color, margin: 0, padding: 0 }}>
+                {pld.value}º
+              </div>
+              <div style={{ color: "white" }}>{pld.dataKey}</div>
             </div>
           ))}
         </div>

@@ -1,16 +1,14 @@
 import React from "react";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts";
 import { CustomTooltip } from "./components/CustomToolTip";
-import { DatosClimaticosSemanales } from "../Types";
+import { AreaChart } from "recharts";
+import { Area } from "recharts";
 
 interface WeekChartProps {
   datosClimaticos: any[];
@@ -19,7 +17,7 @@ interface WeekChartProps {
 const TempetureChart: React.FC<WeekChartProps> = ({ datosClimaticos }) => {
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <LineChart
+      <AreaChart
         width={500}
         height={300}
         data={datosClimaticos}
@@ -30,25 +28,20 @@ const TempetureChart: React.FC<WeekChartProps> = ({ datosClimaticos }) => {
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="dia" />
+        <XAxis dataKey="hora"/>
         <YAxis />
         <Tooltip content={<CustomTooltip />} cursor={{ fill: "transparent" }} />
         <Legend />
-        <Line
+        <Area
           type="monotone"
-          dataKey="temperatura_maxima"
-          stroke="#940A2A"
+          dataKey="temperatura"
+          label="Temperatura"
           strokeWidth={3}
           activeDot={{ r: 5 }}
+          stroke="#8884d8"
+          fill="#8884d8"
         />
-        <Line
-          type="monotone"
-          dataKey="temperatura_minima"
-          stroke="#0C3A94"
-          strokeWidth={3}
-        />
-      </LineChart>
+      </AreaChart>
     </ResponsiveContainer>
   );
 };

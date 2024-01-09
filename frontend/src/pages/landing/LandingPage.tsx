@@ -25,9 +25,11 @@ const LangingPage = () => {
           backgroundAttachment: "fixed",
           backgroundRepeat: "no-repeat",
           color: "white",
+          paddingTop: 69,
+          scrollBehavior: "smooth",
         }}
       >
-        <WeatherIcon estadoTiempo="loading" width="70%" height="70%" />
+        <WeatherIcon estadoTiempo="loading" width="50%" height="50%" />
       </div>
     );
   }
