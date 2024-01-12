@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.ts",
-    "start": "node public/index.js",
+    "start": "node build/index.js",
     "build:frontend": "cd ../frontend && npm run build && cp -r dist ../backend",
     "predict": "ts-node proto/prediction.ts",
     "train": "ts-node proto/train.ts",
