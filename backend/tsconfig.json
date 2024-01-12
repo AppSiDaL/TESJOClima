@@ -6,7 +6,7 @@
     ],
     "moduleDetection": "force",
     "target": "ES6",
-    "outDir": "./public/",
+    "outDir": "./build/",
     "module": "commonjs",
     "strict": true,
     "noUnusedLocals": true,
