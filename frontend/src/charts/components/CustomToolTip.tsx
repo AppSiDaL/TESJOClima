@@ -27,7 +27,7 @@ export const CustomTooltip = ({
               key={pld.dataKey}
               style={{ display: "inline-block", padding: 10 }}
             >
-              <div style={{ color: pld.color, margin: 0, padding: 0 }}>
+              <div style={{  margin: 0, padding: 0 }}>
                 {pld.value}º
               </div>
               <div style={{ color: "white" }}>{pld.dataKey}</div>

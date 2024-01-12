@@ -148,6 +148,8 @@ weatherRouter.get("/landing", (_req, res) => __awaiter(void 0, void 0, void 0, f
         hora: value.dataValues.hora,
         date: value.dataValues.fecha,
         temperatura: value.dataValues.temperatura,
+        velocidad_viento: value.dataValues.velocidad,
+        direccion_viento: value.dataValues.direccion,
         estado_tiempo: (0, weather_1.determineWeatherState)(value.dataValues),
         porcentaje_lluvia: (0, weather_1.calculateRainProbability)(value.dataValues),
         confort: [
@@ -184,6 +186,9 @@ weatherRouter.get("/landing", (_req, res) => __awaiter(void 0, void 0, void 0, f
                 dia: date.format("dddd"),
                 fecha: date.format("YYYY-MM-DD"),
                 pronostico: (0, weather_1.determineWeatherState)(forecasts[0].dataValues),
+                porcentaje_lluvia: (0, weather_1.calculateRainProbability)(forecasts[0].dataValues),
+                velocidad_viento: forecasts[0].dataValues.velocidad,
+                direccion_viento: forecasts[0].dataValues.direccion,
                 temperatura_minima: minTemp,
                 temperatura_maxima: maxTemp,
             });

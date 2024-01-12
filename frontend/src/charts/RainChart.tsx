@@ -7,12 +7,14 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { CustomTooltip } from "./components/CustomToolTip";
 
 interface WeekChartProps {
   datosClimaticos: any[];
+  range: string;
 }
 
-export default function RainChart({ datosClimaticos }: WeekChartProps) {
+export default function RainChart({ datosClimaticos,range }: WeekChartProps) {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <BarChart
@@ -26,11 +28,11 @@ export default function RainChart({ datosClimaticos }: WeekChartProps) {
           bottom: 5,
         }}
       >
-        <XAxis dataKey="name" />
-        <YAxis  />
-        <Tooltip />
+        <XAxis dataKey={range==="today"?"hora":"dia"} />
+        <YAxis />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: "transparent" }} />
         <Legend />
-        <Bar dataKey="porcentaje_lluvia" fill="#8884d8" />
+        <Bar dataKey="porcentaje_lluvia" fill="blue" />
       </BarChart>
     </ResponsiveContainer>
   );
