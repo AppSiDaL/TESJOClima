@@ -12,4 +12,8 @@ const getHours = () => {
   return axios.get(`${url}/hours`).then((res) => res.data);
 };
 
-export default { getLanding, getNow, getHours };
+const getForecast = (ts:any) => {
+  return axios.get(`${url}/forecast/${ts}`).then((res) => res.data);
+}
+
+export default { getLanding, getNow, getHours,getForecast };

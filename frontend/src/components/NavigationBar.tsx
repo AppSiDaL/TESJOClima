@@ -15,7 +15,7 @@ const NavigationBar = () => {
   const handleSearch = () => {
     if (input) {
       const timestamp = new Date(input).getTime();
-      navigate(`/search/${timestamp}`);
+      navigate(`/forecast/${timestamp}`);
     }
   };
   const date = match ? new Date(match.params.ts ?? "") : new Date();
