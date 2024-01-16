@@ -27,28 +27,28 @@ export default function TabsComponent({ landing }: tabsComponentProps) {
               <TempetureChart datosClimaticos={landing.next48} range="today" />
             </Tab>
             <Tab eventKey="todayLluvia" title="Lluvia">
-              <RainChart datosClimaticos={landing.next48} range="today"/>
+              <RainChart datosClimaticos={landing.next48} range="today" />
             </Tab>
             <Tab eventKey="todayViento" title="Viento">
-              <WindChart datosClimaticos={landing.next48} range="today"/>
+              <WindChart datosClimaticos={landing.next48} range="today" />
             </Tab>
           </Tabs>
         </Tab>
         <Tab eventKey="week" title="Semana">
-        <Tabs
+          <Tabs
             defaultActiveKey="weekTempeture"
             id="justify-tab-example"
             className="mb-3"
             justify
           >
             <Tab eventKey="weekTempeture" title="Temperatura">
-              <TempetureChart datosClimaticos={landing.week}  range="week"/>
+              <TempetureChart datosClimaticos={landing.week} range="week" />
             </Tab>
             <Tab eventKey="weekRain" title="Lluvia">
-              <RainChart datosClimaticos={landing.week} range="week"/>
+              <RainChart datosClimaticos={landing.week} range="week" />
             </Tab>
             <Tab eventKey="weekWind" title="Viento">
-              <WindChart datosClimaticos={landing.week} range="week"/>
+              <WindChart datosClimaticos={landing.week} range="week" />
             </Tab>
           </Tabs>
         </Tab>

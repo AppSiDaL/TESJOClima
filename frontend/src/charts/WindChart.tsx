@@ -43,7 +43,6 @@ export default function WindChart({ datosClimaticos,range }: TodayWindChartProps
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey={range==="today"?"hora":"dia"} />
         <YAxis />
         <Tooltip content={<CustomTooltip />} cursor={{ fill: "transparent" }} />
@@ -51,8 +50,8 @@ export default function WindChart({ datosClimaticos,range }: TodayWindChartProps
         <Line
           type="monotone"
           dataKey="velocidad_viento"
-          stroke="#8884d8"
-          strokeDasharray="5 5"
+          stroke="#77B8FF"
+          fill="#77B8FF"
           dot={<WindDirectionArrow direccion={datosClimaticos}/>}
         />
       </LineChart>
