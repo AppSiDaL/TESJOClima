@@ -413,4 +413,169 @@ weatherRouter.get("/hours", (_req, res) => __awaiter(void 0, void 0, void 0, fun
     }));
     res.status(200).json(next48);
 }));
+weatherRouter.get("/forecast/:timestamp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const timestamp = Number(req.params.timestamp);
+    if (!Number.isFinite(+timestamp)) {
+        console.log("Timestamp inválido:", timestamp);
+        return;
+    }
+    const dateObject = new Date(+timestamp); // Convertir el timestamp a un objeto Date
+    const currentHour = moment(dateObject).tz("America/Mexico_City").hour();
+    const currentDate = moment(dateObject)
+        .tz("America/Mexico_City")
+        .startOf("day");
+    const nextDate = moment(currentDate).add(1, "day");
+    const secondNextDate = moment(currentDate).add(2, "day");
+    const beforeTimestamp = yield Weather.findOne({
+        where: {
+            timestamp: {
+                [sequelize_1.Op.lte]: timestamp, // Menor o igual al timestamp
+            },
+        },
+        order: [["timestamp", "DESC"]],
+    });
+    const afterTimestamp = yield Weather.findOne({
+        where: {
+            timestamp: {
+                [sequelize_1.Op.gte]: timestamp, // Mayor o igual al timestamp
+            },
+        },
+        order: [["timestamp", "ASC"]],
+    });
+    let actualValue;
+    if (beforeTimestamp && afterTimestamp) {
+        // Si ambos existen, elige el más cercano al timestamp
+        actualValue =
+            Math.abs(beforeTimestamp.timestamp - timestamp) <
+                Math.abs(afterTimestamp.timestamp - timestamp)
+                ? beforeTimestamp
+                : afterTimestamp;
+    }
+    else if (beforeTimestamp) {
+        // Si solo existe beforeTimestamp, elige ese
+        actualValue = beforeTimestamp;
+    }
+    else if (afterTimestamp) {
+        // Si solo existe afterTimestamp, elige ese
+        actualValue = afterTimestamp;
+    }
+    else {
+        // Si ninguno existe, actualValue será undefined
+    }
+    const restOfDayPredictions = yield Prediction.findAll({
+        where: {
+            fecha: {
+                [sequelize_1.Op.eq]: currentDate.toISOString(),
+            },
+            hora: {
+                [sequelize_1.Op.gte]: currentHour,
+            },
+        },
+        limit: (24 - currentHour) * 60,
+        order: [["timestamp", "ASC"]],
+    });
+    const nextDayPredictions = yield Prediction.findAll({
+        where: {
+            fecha: {
+                [sequelize_1.Op.eq]: nextDate.toISOString(),
+            },
+        },
+        limit: 24 * 60,
+        order: [["timestamp", "ASC"]],
+    });
+    const secondNextDayPredictions = yield Prediction.findAll({
+        where: {
+            fecha: {
+                [sequelize_1.Op.eq]: secondNextDate.toISOString(),
+            },
+            hora: {
+                [sequelize_1.Op.lt]: currentHour,
+            },
+        },
+        limit: currentHour * 60,
+        order: [["timestamp", "ASC"]],
+    });
+    const next48PredictionFirst = restOfDayPredictions.filter((_, index) => index % 60 === 0);
+    const next48PredictionsSecond = nextDayPredictions.filter((_, index) => index % 60 === 0);
+    const next48PredictionsThird = secondNextDayPredictions.filter((_, index) => index % 60 === 0);
+    const next48HoursPredictions = [
+        ...next48PredictionFirst,
+        ...next48PredictionsSecond,
+        ...next48PredictionsThird,
+    ];
+    const actual = {
+        hora: actualValue.dataValues.hora,
+        date: actualValue.dataValues.fecha,
+        temperatura: actualValue.dataValues.temperatura,
+        estado_tiempo: (0, weather_1.determineWeatherState)(actualValue.dataValues),
+        porcentaje_lluvia: (0, weather_1.calculateRainProbability)(actualValue.dataValues),
+        confort: [
+            { name: "humedad", value: actualValue.dataValues.humedad },
+            { name: "lluvia", value: actualValue.dataValues.lluvia },
+            { name: "luz", value: actualValue.dataValues.luz },
+            { name: "presion", value: actualValue.dataValues.presion },
+            { name: "viento", value: actualValue.dataValues.velocidad },
+            { name: "direccion", value: actualValue.dataValues.direccion },
+        ],
+    };
+    const next48 = next48HoursPredictions.map((value) => ({
+        hora: value.dataValues.hora,
+        date: value.dataValues.fecha,
+        temperatura: value.dataValues.temperatura,
+        velocidad_viento: value.dataValues.velocidad,
+        direccion_viento: value.dataValues.direccion,
+        estado_tiempo: (0, weather_1.determineWeatherState)(value.dataValues),
+        porcentaje_lluvia: (0, weather_1.calculateRainProbability)(value.dataValues),
+        confort: [
+            { name: "humedad", value: value.dataValues.humedad },
+            { name: "lluvia", value: value.dataValues.lluvia },
+            { name: "luz", value: value.dataValues.luz },
+            { name: "presion", value: value.dataValues.presion },
+            { name: "viento", value: value.dataValues.velocidad },
+            { name: "direccion", value: value.dataValues.direccion },
+        ],
+    }));
+    let dates = [];
+    for (let i = 0; i < 7; i++) {
+        let date = moment(timestamp)
+            .tz("America/Mexico_City")
+            .startOf("day")
+            .add(i, "days");
+        dates.push(date);
+    }
+    let week = [];
+    for (let date of dates) {
+        let forecasts = yield Prediction.findAll({
+            where: {
+                fecha: {
+                    [sequelize_1.Op.between]: [
+                        date.startOf("day").toISOString(),
+                        date.endOf("day").toISOString(),
+                    ],
+                },
+            },
+            order: [["timestamp", "DESC"]],
+        });
+        if (forecasts.length > 0) {
+            let minTemp = forecasts.reduce((min, p) => p.dataValues.temperatura < min ? p.dataValues.temperatura : min, forecasts[0].dataValues.temperatura);
+            let maxTemp = forecasts.reduce((max, p) => p.dataValues.temperatura > max ? p.dataValues.temperatura : max, forecasts[0].dataValues.temperatura);
+            week.push({
+                dia: date.format("dddd"),
+                fecha: date.format("YYYY-MM-DD"),
+                pronostico: (0, weather_1.determineWeatherState)(forecasts[0].dataValues),
+                porcentaje_lluvia: (0, weather_1.calculateRainProbability)(forecasts[0].dataValues),
+                velocidad_viento: forecasts[0].dataValues.velocidad,
+                direccion_viento: forecasts[0].dataValues.direccion,
+                temperatura_minima: minTemp,
+                temperatura_maxima: maxTemp,
+            });
+        }
+    }
+    const response = {
+        actual: actual,
+        next48: next48,
+        week: week,
+    };
+    res.status(200).json(response);
+}));
 module.exports = weatherRouter;
