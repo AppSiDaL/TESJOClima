@@ -76,10 +76,10 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
       };
     });
 
-    const insertedData = await Weather.bulkCreate(newDataArray, {
+    await Weather.bulkCreate(newDataArray, {
       ignoreDuplicates: true,
     });
-    const responseArray = newDataArray.map(item => ({
+    const responseArray = newDataArray.map(item:any => ({
       timestamp: item.ts,
       fecha: item.fecha,
       hora: item.hora,
