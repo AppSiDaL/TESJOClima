@@ -80,7 +80,7 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
       ignoreDuplicates: true,
     });
     
-    res.status(201).json({});
+    res.status(201);
   } catch (error) {
     console.error(error);
   }
