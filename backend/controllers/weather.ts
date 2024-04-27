@@ -83,7 +83,7 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
         timestamp: item.ts,
     }));
     
-    res.status(201).json(responseArray);
+    res.status(201).json({});
   } catch (error) {
     console.error(error);
   }
