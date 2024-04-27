@@ -80,11 +80,9 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
       ignoreDuplicates: true,
     });
     const responseArray = newDataArray.map((item:any) => ({
-      timestamp: item.ts,
       fecha: item.fecha,
       hora: item.hora,
       minuto: item.minuto,
-      temperatura: item.temperatura,
     }));
     
     res.status(201).json(responseArray);
