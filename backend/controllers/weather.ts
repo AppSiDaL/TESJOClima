@@ -76,11 +76,11 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
       };
     });
 
-    await Weather.bulkCreate(newDataArray, {
+    const insertedData=await Weather.bulkCreate(newDataArray, {
       ignoreDuplicates: true,
     });
     
-    res.status(201);
+    res.status(201).send("Inserted: ",insertedData.length);
   } catch (error) {
     console.error(error);
   }
