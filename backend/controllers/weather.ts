@@ -80,7 +80,7 @@ weatherRouter.get("/bridge", async (_req: Request, res: Response) => {
       ignoreDuplicates: true,
     });
     
-    res.status(201).send("Inserted: ",insertedData.length);
+    res.status(201).send(`Inserted: ${insertedData.length}`);
   } catch (error) {
     console.error(error);
   }
