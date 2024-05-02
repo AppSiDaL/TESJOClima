@@ -9,7 +9,7 @@
     "build:frontend": "cd ../frontend && npm run build && cp -r dist ../backend",
     "predict": "ts-node proto/prediction.ts",
     "train": "ts-node proto/train.ts",
-    "build": "cd ../frontend && npm run build && cp -r dist ../backend && cd ../backend && tsc",
+    "build": "cd ../frontend && npm install && npm run build && cp -r dist ../backend && cd ../backend && tsc",
     "test": "jest"
   },
   "author": "",
