@@ -1,4 +1,4 @@
-import * as tf from "@tensorflow/tfjs-node";
+/* import * as tf from "@tensorflow/tfjs-node";
 const { Weather } = require("../models");
 
 // Define el modelo
@@ -68,3 +68,4 @@ Weather.findAll({})
   .catch((err: any) => {
     console.error(err);
   });
+ */
