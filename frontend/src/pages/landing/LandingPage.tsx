@@ -24,6 +24,7 @@ const LangingPage = () => {
           backgroundSize: "cover",
           backgroundAttachment: "fixed",
           backgroundRepeat: "no-repeat",
+          height: "100vh",
           color: "white",
           paddingTop: 69,
           scrollBehavior: "smooth",
